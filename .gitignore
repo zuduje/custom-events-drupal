@@ -1,4 +1,5 @@
 # Sistema operativo
+.gitignore
 .DS_Store
 Thumbs.db
 README.md

@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Implementa hook_theme().
+ */
+function custom_events_theme($existing, $type, $theme, $path): array {
+  return [
+    'custom_events_list' => [
+      'variables' => [
+      'events'       => [],
+      'is_logged_in' => FALSE,
+      'is_admin'     => FALSE,
+      'user_name'    => NULL,
+    ],
+    'template' => 'custom-events-list',
+    ],
+    'custom_events_detail' => [
+      'variables' => [
+        'event'        => [],
+        'is_logged_in' => FALSE,
+      ],
+      'template' => 'custom-events-detail',
+    ],
+  ];
+}
+
+/**
+ * Implementa hook_user_login().
+ * Redirige al usuario a /eventos después de iniciar sesión.
+ */
+/**
+ * Implementa hook_user_login().
+ */
+function custom_events_user_login($account) {
+  \Drupal::service('request_stack')
+    ->getCurrentRequest()
+    ->query
+    ->set('destination', '/eventos');
+}

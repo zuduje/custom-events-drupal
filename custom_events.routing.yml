@@ -1,0 +1,34 @@
+custom_events.list:
+  path: '/eventos'
+  defaults:
+    _controller: '\Drupal\custom_events\Controller\EventController::listEvents'
+    _title: 'Eventos'
+  requirements:
+    _permission: 'access content'
+
+custom_events.detail:
+  path: '/eventos/{event_id}'
+  defaults:
+    _controller: '\Drupal\custom_events\Controller\EventController::eventDetail'
+    _title: 'Detalle del Evento'
+  requirements:
+    _permission: 'access content'
+    event_id: '\d+'
+
+custom_events.admin:
+  path: '/admin/eventos/crear'
+  defaults:
+    _form: '\Drupal\custom_events\Form\EventForm'
+    _title: 'Crear Evento'
+  requirements:
+    _permission: 'administer site configuration'
+
+custom_events.api_register:
+  path: '/api/eventos/{event_id}/registrar'
+  defaults:
+    _controller: '\Drupal\custom_events\Controller\EventApiController::registerUser'
+    _title: 'API Registrar'
+  requirements:
+    _user_is_logged_in: 'TRUE'
+    event_id: '\d+'
+  methods: [POST]

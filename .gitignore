@@ -1,0 +1,16 @@
+# Sistema operativo
+.DS_Store
+Thumbs.db
+README.md
+
+# Editor
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# PHP
+*.log
+
+# Drupal
+/config/sync/

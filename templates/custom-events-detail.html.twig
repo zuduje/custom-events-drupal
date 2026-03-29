@@ -1,0 +1,73 @@
+<div class="me-events-page" data-logged="{{ is_logged_in ? 'true' : 'false' }}">
+
+  <header class="me-page-header">
+    <div class="me-header-inner">
+      <a href="/eventos" class="me-back-link">← Todos los eventos</a>
+      <nav class="me-header-nav">
+        {% if is_logged_in %}
+          <a href="/user/logout" class="me-btn me-btn-outline me-btn-sm">Salir</a>
+        {% else %}
+          <a href="/user/login" class="me-btn me-btn-primary me-btn-sm">Iniciar sesión</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="me-events-main">
+    <div class="me-container me-container-narrow">
+
+      <div class="me-toast" id="me-toast" role="alert" aria-live="polite"></div>
+
+      <article class="me-detail-card">
+
+        <div class="me-detail-header">
+          <div class="me-card-country">
+            <span class="me-country-name">🌍 {{ event.country }}</span>
+          </div>
+          <div class="me-card-date">
+            📅 <time datetime="{{ event.event_date }}">{{ event.event_date_fmt }}</time>
+          </div>
+        </div>
+
+        <h1 class="me-detail-title">{{ event.title }}</h1>
+
+        <p class="me-detail-description">{{ event.description }}</p>
+
+        <div class="me-detail-meta">
+          <div class="me-inscribed-count me-inscribed-lg" id="count-{{ event.event_id }}">
+            <span class="me-count-icon">👥</span>
+            <strong class="me-count-number">{{ event.inscribed_count }}</strong>
+            <span>personas inscritas</span>
+          </div>
+
+          {% if event.is_past %}
+            <div class="me-event-past-notice">Este evento ya ocurrió</div>
+          {% elseif event.is_registered %}
+            <div class="me-already-registered">
+              <span class="me-check">✓</span> Ya estás inscrito en este evento
+            </div>
+          {% elseif is_logged_in %}
+            <button class="me-btn me-btn-primary me-btn-lg me-register-btn"
+                    data-event-id="{{ event.event_id }}"
+                    data-event-title="{{ event.title }}">
+              Registrarme al evento
+            </button>
+          {% else %}
+            <a href="/user/login?destination=/eventos/{{ event.event_id }}"
+               class="me-btn me-btn-primary me-btn-lg">
+              Inicia sesión para inscribirte
+            </a>
+          {% endif %}
+        </div>
+
+      </article>
+    </div>
+  </main>
+
+  <footer class="me-footer">
+    <div class="me-container">
+      <p class="me-footer-copy">© {{ "now"|date("Y") }} Móvil Éxito · Eventos y Experiencias</p>
+    </div>
+  </footer>
+
+</div>

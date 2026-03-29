@@ -1,0 +1,9 @@
+services:
+  custom_events.event_service:
+    class: Drupal\custom_events\Service\EventService
+    arguments:
+      - '@database'
+      - '@current_user'
+      - '@cache.default'
+      - '@http_client'
+      - '@logger.factory'

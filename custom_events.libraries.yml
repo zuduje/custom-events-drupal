@@ -1,0 +1,12 @@
+custom_events_assets:
+  version: '1.0.0'
+  css:
+    theme:
+      css/custom-events.css: {}
+  js:
+    js/custom-events.js:
+      attributes:
+        defer: true
+  dependencies:
+    - core/drupalSettings
+    - core/once

@@ -1,0 +1,9 @@
+name: 'Custom Events'
+type: module
+description: 'Gestión de eventos e inscripciones de usuarios con integración a restcountries.com'
+package: Custom
+core_version_requirement: ^10 || ^11
+version: '1.0.0'
+dependencies:
+  - drupal:node
+  - drupal:user

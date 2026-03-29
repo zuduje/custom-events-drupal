@@ -1,0 +1,167 @@
+<div class="me-events-page" id="me-events-app" data-logged="{{ is_logged_in ? 'true' : 'false' }}">
+
+  <header class="me-page-header">
+    <div class="me-header-inner">
+      <div class="me-brand">
+        <div class="me-logo">
+          <span class="me-logo-movil">📱 móvil</span>
+          <span class="me-logo-exito">éxito</span>
+        </div>
+      </div>
+      <nav class="me-header-nav">
+        {% if is_logged_in %}
+          <span class="me-user-badge">👤 {{ user_name }}</span>
+          <a href="/user/logout" class="me-btn me-btn-outline-purple me-btn-sm">Cerrar sesión</a>
+        {% else %}
+          <a href="/user/login" class="me-btn me-btn-primary me-btn-sm">Mi cuenta</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <section class="me-hero">
+    <div class="me-hero-inner">
+      <div class="me-hero-content">
+        <p class="me-hero-eyebrow">✦ Calendario de eventos</p>
+        <h2 class="me-hero-title">
+          Próximos eventos<br>para <span class="me-hero-accent">ti</span>
+        </h2>
+        <p class="me-hero-sub">
+          Inscríbete a los eventos que más te interesan y vive la experiencia Éxito
+        </p>
+        {% if not is_logged_in %}
+          <a href="/user/login" class="me-btn me-btn-primary me-btn-lg">
+            ¡Regístrate ahora!
+          </a>
+        {% endif %}
+      </div>
+      <div class="me-hero-illustration">
+        <span class="me-hero-phone">📱</span>
+        <span class="me-hero-stars">✦</span>
+      </div>
+    </div>
+    <div class="me-hero-deco" aria-hidden="true">
+      <span class="me-deco-circle me-deco-c1"></span>
+      <span class="me-deco-circle me-deco-c2"></span>
+      <span class="me-deco-circle me-deco-c3"></span>
+    </div>
+  </section>
+
+  <main class="me-events-main">
+    <div class="me-container">
+
+      <div class="me-toast" id="me-toast" role="alert" aria-live="polite"></div>
+
+      {% if events is empty %}
+        <div class="me-empty-state">
+          <div class="me-empty-icon">📭</div>
+          <h3>No hay eventos disponibles</h3>
+          <p>Vuelve pronto, ¡pronto tendremos nuevos eventos!</p>
+        </div>
+      {% else %}
+
+        <div class="me-stats-bar">
+          <div class="me-stat">
+            <strong>{{ events|length }}</strong>
+            <span>eventos disponibles</span>
+          </div>
+          <div class="me-stat">
+            <strong>
+              {% set total = 0 %}
+              {% for e in events %}{% set total = total + e.inscribed_count %}{% endfor %}
+              {{ total }}
+            </strong>
+            <span>inscripciones en todos los eventos</span>
+          </div>
+        </div>
+
+        <div class="me-events-grid" id="me-events-grid">
+          {% for event in events %}
+            <article class="me-event-card
+              {% if event.is_past %}me-card-past{% endif %}
+              {% if event.is_registered %}me-card-registered{% endif %}"
+              data-event-id="{{ event.event_id }}">
+
+              <div class="me-card-top-bar"></div>
+
+              <div class="me-card-badges">
+                {% if event.is_registered %}
+                  <span class="me-badge me-badge-registered">✓ Inscrito</span>
+                {% elseif event.is_past %}
+                  <span class="me-badge me-badge-past">Finalizado</span>
+                {% else %}
+                  <span class="me-badge me-badge-upcoming">Próximo</span>
+                {% endif %}
+              </div>
+
+              <div class="me-card-header">
+                <div class="me-card-country">
+                  <span class="me-country-name">🌍 {{ event.country }}</span>
+                </div>
+                <div class="me-card-date">
+                  📅 <time datetime="{{ event.event_date }}">{{ event.event_date_fmt }}</time>
+                </div>
+              </div>
+
+              <div class="me-card-body">
+                <h3 class="me-card-title">
+                  <a href="/eventos/{{ event.event_id }}" class="me-card-link">
+                    {{ event.title }}
+                  </a>
+                </h3>
+                <p class="me-card-description">
+                  {{ event.description|slice(0, 120) }}{% if event.description|length > 120 %}…{% endif %}
+                </p>
+              </div>
+
+              <div class="me-card-footer">
+                <div class="me-inscribed-count" id="count-{{ event.event_id }}">
+                  <span>👥</span>
+                  <strong class="me-count-number">{{ event.inscribed_count }}</strong>
+                  <span>{{ event.inscribed_count == 1 ? 'inscrito' : 'inscritos' }}</span>
+                </div>
+
+                {% if not event.is_past %}
+                  {% if is_logged_in %}
+                    {% if event.is_registered %}
+                      <button class="me-btn me-btn-registered" disabled>✓ Inscrito</button>
+                    {% else %}
+                      <button class="me-btn me-btn-primary me-register-btn"
+                              data-event-id="{{ event.event_id }}"
+                              data-event-title="{{ event.title }}">
+                        ¡Regístrame!
+                      </button>
+                    {% endif %}
+                  {% else %}
+                    <a href="/user/login" class="me-btn me-btn-outline-purple me-btn-sm">
+                      Inicia sesión
+                    </a>
+                  {% endif %}
+                {% endif %}
+              </div>
+
+            </article>
+          {% endfor %}
+        </div>
+
+        {% if is_admin %}
+          <div class="me-admin-link">
+            <a href="/admin/eventos/crear" class="me-btn me-btn-ghost">
+              + Crear nuevo evento
+            </a>
+          </div>
+        {% endif %}
+
+      {% endif %}
+    </div>
+  </main>
+
+  <footer class="me-footer">
+    <div class="me-container">
+      <p class="me-footer-copy">
+        © {{ "now"|date("Y") }} Móvil Éxito · Todos los derechos reservados
+      </p>
+    </div>
+  </footer>
+
+</div>
